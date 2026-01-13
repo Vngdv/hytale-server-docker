@@ -11,6 +11,7 @@ docker run -d \
   --name hytale \
   -p 5520:5520/udp \
   -v ./data:/hytale-server \
+  -it \
   ghcr.io/vngdv/hytale-server-docker:latest
 ```
 
@@ -35,6 +36,8 @@ services:
       AUTO_UPDATE: true
       SERVER_NAME: My Hytale Server
       MAX_PLAYERS: 10
+    stdin_open: true
+    tty: true
     restart: unless-stopped
 ```
 
@@ -45,6 +48,28 @@ docker compose up -d
 ```
 
 **Note:** On first run, check the logs with `docker compose logs -f` and follow the browser authentication prompt.
+
+## Server Authentication
+
+After the server starts for the first time, you need to authenticate it to allow players to join. The container must have TTY enabled (see examples above).
+
+Follow these steps:
+
+1. **Attach to the running server console:**
+   ```bash
+   docker attach hytale
+   ```
+
+2. **Type the authentication command directly in the server console:**
+   ```
+   /auth login device
+   ```
+
+3. **Follow the authentication instructions** that appear in the console. This typically involves visiting a URL and completing the authentication process.
+
+Your server will now be authenticated and players will be able to join!
+
+**Note:** If using Docker Compose, make sure `stdin_open: true` and `tty: true` are set in your compose.yaml (as shown in the example above).
 
 ## Environment Variables
 

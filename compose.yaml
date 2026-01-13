@@ -9,4 +9,6 @@ services:
       - ./data:/hytale-server
     environment:
       BIND_ADDRESS: 0.0.0.0:5520
+    stdin_open: true
+    tty: true
     restart: unless-stopped
