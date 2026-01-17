@@ -3,6 +3,8 @@ set -e
 
 cd /hytale-server
 
+PATCHLINE="${PATCHLINE:-release}"
+
 if [ ! -f "hytale-downloader" ]; then
     echo "Downloading hytale-downloader..."
     curl -sL https://downloader.hytale.com/hytale-downloader.zip -o hytale-downloader.zip
@@ -19,7 +21,7 @@ if [ -f ".server_version" ]; then
     CURRENT_VERSION=$(cat .server_version)
     echo "Current version: $CURRENT_VERSION"
     echo "Checking for updates..."
-    AVAILABLE_VERSION=$(./hytale-downloader -print-version 2>/dev/null || echo "unknown")
+    AVAILABLE_VERSION=$(./hytale-downloader -patchline "$PATCHLINE" -print-version 2>/dev/null || echo "unknown")
     
     if [ "$CURRENT_VERSION" = "$AVAILABLE_VERSION" ] && [ "$AVAILABLE_VERSION" != "unknown" ]; then
         echo "Already up to date (Version: $CURRENT_VERSION)"
@@ -34,7 +36,8 @@ else
 fi
 
 
-./hytale-downloader -download-path game.zip
+
+./hytale-downloader -patchline "$PATCHLINE" -download-path game.zip
 DOWNLOAD_EXIT=$?
 
 if [ $DOWNLOAD_EXIT -ne 0 ]; then
